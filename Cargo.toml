@@ -1,0 +1,17 @@
+[package]
+name = "uurl"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "uurl"
+path = "src/main.rs"
+
+[lib]
+name = "uurl"
+path = "src/lib.rs"
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
+arboard = "3.0"
+atty = "0.2"
