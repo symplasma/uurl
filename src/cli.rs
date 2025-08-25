@@ -8,4 +8,8 @@ pub struct Cli {
     /// Input URLs or text to process
     #[arg(trailing_var_arg = true)]
     pub(crate) input: Vec<String>,
+
+    /// Color URLs
+    #[arg(long)]
+    pub(crate) color_urls: Option<String>,
 }

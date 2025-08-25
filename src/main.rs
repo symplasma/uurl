@@ -12,7 +12,7 @@ fn main() {
 
     match get_input(&cli) {
         Ok(input_source) => {
-            process_input(input_source);
+            process_input(input_source, &cli);
         }
         Err(e) => {
             eprintln!("Error: {e}");

@@ -4,6 +4,7 @@
 
 use linkify::{LinkFinder, LinkKind, Spans};
 use std::io::{self, Read};
+use yansi::{Paint as _, Style};
 
 use crate::cli::Cli;
 
@@ -47,12 +48,17 @@ pub fn get_input(opts: &Cli) -> Result<InputSource, Box<dyn std::error::Error>> 
 ///
 /// Currently just passes through the input as-is.
 /// Future versions will add URL transformation logic.
-pub fn process_input(input: InputSource) {
+pub fn process_input(input: InputSource, opts: &Cli) {
     let text = match input {
         InputSource::Stdin(content) => content,
         InputSource::Args(args) => args.join("\n"),
         InputSource::Clipboard(content) => content,
     };
+
+    let mut link_style = Style::default();
+    if opts.color_urls.is_some() {
+        link_style = link_style.blue();
+    }
 
     for span in text_to_spans(&text) {
         match span.kind() {
@@ -60,11 +66,16 @@ pub fn process_input(input: InputSource) {
             None => print!("{}", span.as_str()),
 
             // Handle links
-            Some(link_kind) if *link_kind == LinkKind::Url => print!("{}", span.as_str()),
-            Some(link_kind) if *link_kind == LinkKind::Email => print!("{}", span.as_str()),
+            Some(link_kind) => {
+                let string = match link_kind {
+                    LinkKind::Url => span.as_str(),
+                    LinkKind::Email => span.as_str(),
 
-            // LinkKind is marked as non-exhaustive so we must have this
-            Some(_) => unimplemented!("This link kind has not been implemented yet."),
+                    // LinkKind is marked as non-exhaustive so we must have this
+                    _ => unimplemented!("This link kind has not been implemented yet."),
+                };
+                print!("{}", string.paint(link_style));
+            }
         }
     }
 
