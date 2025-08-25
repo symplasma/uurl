@@ -1,8 +1,10 @@
 use std::fmt;
 use std::str::FromStr;
 
+use crate::util::skip_first_char;
+
 /// A newtype wrapper around the `url` crate's `Url` type.
-/// 
+///
 /// This provides a more controlled interface for URL handling within this crate
 /// and allows for future extensions and customizations.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -22,6 +24,15 @@ impl Url {
     /// Convert into the underlying `url::Url`.
     pub fn into_url(self) -> url::Url {
         self.0
+    }
+
+    pub fn to_git_ssh(&self) -> String {
+        // s%^git@github.com:%https://github.com/%
+        format!(
+            "git@{}:{}",
+            self.0.host_str().unwrap_or_default(),
+            skip_first_char(self.0.path()),
+        )
     }
 }
 

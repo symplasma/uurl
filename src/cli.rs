@@ -20,4 +20,8 @@ pub struct Cli {
     /// Print only links, one per line
     #[arg(long)]
     pub(crate) links_only: bool,
+
+    /// Prints URLs as Git SSH style urls
+    #[arg(long)]
+    pub(crate) git_ssh: bool,
 }

@@ -8,7 +8,7 @@ use linkify::{LinkFinder, LinkKind, Spans};
 use std::io::{self, Read};
 use yansi::{Paint, Style, hyperlink::HyperlinkExt};
 
-use crate::cli::Cli;
+use crate::{cli::Cli, url::Url};
 
 /// Represents the different sources of input for the URL processor
 #[derive(Debug, Clone)]
@@ -74,14 +74,21 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
             // Handle links
             Some(link_kind) => {
                 let string = match link_kind {
-                    LinkKind::Url => span.as_str(),
-                    LinkKind::Email => span.as_str(),
+                    LinkKind::Url => {
+                        let url = Url::parse(span.as_str())?;
+                        if opts.git_ssh {
+                            url.to_git_ssh()
+                        } else {
+                            url.as_url().as_str().to_owned()
+                        }
+                    }
+                    LinkKind::Email => span.as_str().to_owned(),
 
                     // LinkKind is marked as non-exhaustive so we must have this
                     _ => unimplemented!("This link kind has not been implemented yet."),
                 };
                 if opts.clickable {
-                    print!("{}", string.link(string).paint(link_style));
+                    print!("{}", string.link(&string).paint(link_style));
                 } else {
                     print!("{}", string.paint(link_style));
                 }
@@ -107,4 +114,11 @@ pub fn text_to_spans(text: &str) -> Spans {
     let mut finder = LinkFinder::new();
     finder.url_must_have_scheme(false);
     finder.spans(text)
+}
+
+/// Returns all characters except the first
+pub(crate) fn skip_first_char(s: &str) -> &str {
+    // If there's a first character, get its length in bytes.
+    // Otherwise, return an empty string.
+    s.chars().next().map(|c| &s[c.len_utf8()..]).unwrap_or("")
 }
