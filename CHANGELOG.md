@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v0.1.0 (2025-08-25)
 
+<csr-id-810fb29d2f1ec8146492f37e18c0c6318fe89503/>
+
 ### New Features
 
  - <csr-id-1123ad82f0fdb2455a958097dd35b6d231b4079e/> Clickable links via OSC8 codes
@@ -23,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 13 commits contributed to the release.
+ - 14 commits contributed to the release.
  - 6 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -34,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Add changelog ([`ab777b4`](https://github.com/symplasma/uurl/commit/ab777b4e24023a94911d6dec0fdbb516a5200e89))
     - Update metadata and license ([`fb2d131`](https://github.com/symplasma/uurl/commit/fb2d131a1849eb3fa17f739e676392f5744b5b2d))
     - Clickable links via OSC8 codes ([`1123ad8`](https://github.com/symplasma/uurl/commit/1123ad82f0fdb2455a958097dd35b6d231b4079e))
     - Add custom link colors ([`e008d16`](https://github.com/symplasma/uurl/commit/e008d16de46797b251e303867671ba9a83ea6a69))
