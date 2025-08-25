@@ -2,9 +2,11 @@
 //!
 //! This library provides functionality to manipulate URLs from various input sources.
 
+use color_eyre::{Result, eyre::Ok};
+use csscolorparser::parse;
 use linkify::{LinkFinder, LinkKind, Spans};
 use std::io::{self, Read};
-use yansi::{Paint as _, Style};
+use yansi::{Paint, Style};
 
 use crate::cli::Cli;
 
@@ -23,7 +25,7 @@ pub enum InputSource {
 /// 1. STDIN (if available)
 /// 2. Command line arguments (if provided)
 /// 3. System clipboard (as fallback)
-pub fn get_input(opts: &Cli) -> Result<InputSource, Box<dyn std::error::Error>> {
+pub fn get_input(opts: &Cli) -> Result<InputSource> {
     // Check if STDIN has data
     if !atty::is(atty::Stream::Stdin) {
         let mut buffer = String::new();
@@ -48,7 +50,7 @@ pub fn get_input(opts: &Cli) -> Result<InputSource, Box<dyn std::error::Error>> 
 ///
 /// Currently just passes through the input as-is.
 /// Future versions will add URL transformation logic.
-pub fn process_input(input: InputSource, opts: &Cli) {
+pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
     let text = match input {
         InputSource::Stdin(content) => content,
         InputSource::Args(args) => args.join("\n"),
@@ -56,9 +58,8 @@ pub fn process_input(input: InputSource, opts: &Cli) {
     };
 
     let mut link_style = Style::default();
-    if opts.color_urls.is_some() {
-        link_style = link_style.blue();
-    }
+    let [r, g, b, _a] = parse(&opts.color_urls)?.to_rgba8();
+    link_style = link_style.rgb(r, g, b);
 
     for span in text_to_spans(&text) {
         match span.kind() {
@@ -82,6 +83,8 @@ pub fn process_input(input: InputSource, opts: &Cli) {
     // add a newline after the text
     // TODO we should probably make this configurable
     println!();
+
+    Ok(())
 }
 
 /// Find URls in the input
