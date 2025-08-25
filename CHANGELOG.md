@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.1.1 (2025-08-25)
+
+### New Features
+
+ - <csr-id-598a28a03807cec0c976ff6f5202180546330ca6/> Add --git-ssh option
+ - <csr-id-fad2019bbd4893f7e90dd54335eeb5b245eae62d/> add Url newtype wrapper for url crate
+ - <csr-id-2de00634420af5bdbe0f750f895c3f31ff9c8fdf/> add url module to project structure
+ - <csr-id-c6668586887adf441cc0534158af3636bd11dc0d/> add url crate dependency
+ - <csr-id-0b8c14a2f53b10034329d447e80c9cc949cfdc05/> Add --links-only option
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 5 commits contributed to the release.
+ - 5 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Add --git-ssh option ([`598a28a`](https://github.com/symplasma/uurl/commit/598a28a03807cec0c976ff6f5202180546330ca6))
+    - Add Url newtype wrapper for url crate ([`fad2019`](https://github.com/symplasma/uurl/commit/fad2019bbd4893f7e90dd54335eeb5b245eae62d))
+    - Add url module to project structure ([`2de0063`](https://github.com/symplasma/uurl/commit/2de00634420af5bdbe0f750f895c3f31ff9c8fdf))
+    - Add url crate dependency ([`c666858`](https://github.com/symplasma/uurl/commit/c6668586887adf441cc0534158af3636bd11dc0d))
+    - Add --links-only option ([`0b8c14a`](https://github.com/symplasma/uurl/commit/0b8c14a2f53b10034329d447e80c9cc949cfdc05))
+</details>
+
 ## v0.1.0 (2025-08-25)
 
 <csr-id-810fb29d2f1ec8146492f37e18c0c6318fe89503/>
@@ -25,7 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 14 commits contributed to the release.
+ - 15 commits contributed to the release.
  - 6 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -36,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release uurl v0.1.0 ([`d01a207`](https://github.com/symplasma/uurl/commit/d01a2076481f02b400b420dec48bc5f32e186645))
     - Add changelog ([`ab777b4`](https://github.com/symplasma/uurl/commit/ab777b4e24023a94911d6dec0fdbb516a5200e89))
     - Update metadata and license ([`fb2d131`](https://github.com/symplasma/uurl/commit/fb2d131a1849eb3fa17f739e676392f5744b5b2d))
     - Clickable links via OSC8 codes ([`1123ad8`](https://github.com/symplasma/uurl/commit/1123ad82f0fdb2455a958097dd35b6d231b4079e))
