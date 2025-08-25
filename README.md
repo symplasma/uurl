@@ -10,6 +10,13 @@ Universal url: a transformer and manipulator for Urls.
 
 ## Features
 
+- [ ] Find links in text using [linkify](https://crates.io/crates/linkify)
+  - [x] Bare links
+  - [ ] Git SSH links
+  - [ ] Markdown links
+- [x] Color links via ANSI codes
+- [x] Make links clickable via OSC8 codes
+- [ ] Convert bare links to Markdown links with titles
 - [ ] Extract various URL components
 - [ ] Rewrite/modify various URL components
 - [ ] Replace URLs based on template expressions
