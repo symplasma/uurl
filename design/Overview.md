@@ -1,6 +1,8 @@
 # Overview
 
-`uurl` is library and a CLI app to manipulate URLs.
+`uurl` is a Rust library and a CLI app to manipulate URLs.
+
+It should use the Rust 2024 edition.
 
 ## Features
 
