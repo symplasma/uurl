@@ -1,19 +1,22 @@
 //! uurl - A library for URL manipulation
-//! 
+//!
 //! This library provides functionality to manipulate URLs from various input sources.
 
 use std::io::{self, Read};
 
+use linkify::{LinkFinder, LinkKind, Spans};
+
 /// Represents the different sources of input for the URL processor
 #[derive(Debug, Clone)]
 pub enum InputSource {
+    // TODO make input on STDIN streaming to handle large inputs
     Stdin(String),
     Args(Vec<String>),
     Clipboard(String),
 }
 
 /// Get input from the most appropriate source based on availability
-/// 
+///
 /// Priority order:
 /// 1. STDIN (if available)
 /// 2. Command line arguments (if provided)
@@ -27,12 +30,12 @@ pub fn get_input(args: Vec<String>) -> Result<InputSource, Box<dyn std::error::E
             return Ok(InputSource::Stdin(buffer.trim().to_string()));
         }
     }
-    
+
     // Check if args are provided (skip program name)
     if args.len() > 1 {
         return Ok(InputSource::Args(args[1..].to_vec()));
     }
-    
+
     // Fall back to clipboard
     let mut clipboard = arboard::Clipboard::new()?;
     let clipboard_content = clipboard.get_text()?;
@@ -40,13 +43,38 @@ pub fn get_input(args: Vec<String>) -> Result<InputSource, Box<dyn std::error::E
 }
 
 /// Process the input and return the result
-/// 
+///
 /// Currently just passes through the input as-is.
 /// Future versions will add URL transformation logic.
-pub fn process_input(input: InputSource) -> String {
-    match input {
+pub fn process_input(input: InputSource) {
+    let text = match input {
         InputSource::Stdin(content) => content,
-        InputSource::Args(args) => args.join(" "),
+        InputSource::Args(args) => args.join("\n"),
         InputSource::Clipboard(content) => content,
+    };
+
+    for span in text_to_spans(&text) {
+        match span.kind() {
+            // Handle non-link text
+            None => print!("{}", span.as_str()),
+
+            // Handle links
+            Some(link_kind) if *link_kind == LinkKind::Url => print!("{}", span.as_str()),
+            Some(link_kind) if *link_kind == LinkKind::Email => print!("{}", span.as_str()),
+
+            // LinkKind is marked as non-exhaustive so we must have this
+            Some(_) => unimplemented!("This link kind has not been implemented yet."),
+        }
     }
+
+    // add a newline after the text
+    // TODO we should probably make this configurable
+    println!("");
+}
+
+/// Find URls in the input
+pub fn text_to_spans(text: &str) -> Spans {
+    let mut finder = LinkFinder::new();
+    finder.url_must_have_scheme(false);
+    finder.spans(text)
 }

@@ -17,11 +17,10 @@ struct Cli {
 fn main() {
     let cli = Cli::parse();
     let args: Vec<String> = env::args().collect();
-    
+
     match uurl::get_input(args) {
         Ok(input_source) => {
-            let result = uurl::process_input(input_source);
-            println!("{}", result);
+            uurl::process_input(input_source);
         }
         Err(e) => {
             eprintln!("Error: {}", e);
