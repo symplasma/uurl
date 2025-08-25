@@ -1,29 +1,21 @@
 //! uurl CLI - Command line interface for URL manipulation
 
-use clap::Parser;
-use std::env;
+use clap::Parser as _;
 use std::process;
-
-#[derive(Parser)]
-#[command(name = "uurl")]
-#[command(about = "A CLI tool for URL manipulation")]
-#[command(version = "0.1.0")]
-struct Cli {
-    /// Input URLs or text to process
-    #[arg(trailing_var_arg = true)]
-    input: Vec<String>,
-}
+use uurl::{
+    cli::Cli,
+    util::{get_input, process_input},
+};
 
 fn main() {
     let cli = Cli::parse();
-    let args: Vec<String> = env::args().collect();
 
-    match uurl::get_input(args) {
+    match get_input(&cli) {
         Ok(input_source) => {
-            uurl::process_input(input_source);
+            process_input(input_source);
         }
         Err(e) => {
-            eprintln!("Error: {}", e);
+            eprintln!("Error: {e}");
             process::exit(1);
         }
     }
