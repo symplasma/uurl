@@ -11,9 +11,13 @@ pub struct Cli {
 
     /// Print URLs in color, any color notation valid in CSS works (defaults to blue)
     #[arg(short, long, num_args = 0..=1, default_missing_value = "blue")]
-    pub(crate) color_urls: String,
+    pub(crate) color_urls: Option<String>,
 
     /// Make links clickable
     #[arg(short = 'l', long)]
     pub(crate) clickable: bool,
+
+    /// Print only links, one per line
+    #[arg(long)]
+    pub(crate) links_only: bool,
 }

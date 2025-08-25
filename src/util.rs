@@ -58,13 +58,18 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
     };
 
     let mut link_style = Style::default();
-    let [r, g, b, _a] = parse(&opts.color_urls)?.to_rgba8();
-    link_style = link_style.rgb(r, g, b);
-
+    if let Some(color_urls) = &opts.color_urls {
+        let [r, g, b, _a] = parse(color_urls)?.to_rgba8();
+        link_style = link_style.rgb(r, g, b);
+    }
     for span in text_to_spans(&text) {
         match span.kind() {
             // Handle non-link text
-            None => print!("{}", span.as_str()),
+            None => {
+                if !opts.links_only {
+                    print!("{}", span.as_str())
+                }
+            }
 
             // Handle links
             Some(link_kind) => {
@@ -80,13 +85,19 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
                 } else {
                     print!("{}", string.paint(link_style));
                 }
+
+                if opts.links_only {
+                    println!()
+                }
             }
         }
     }
 
     // add a newline after the text
     // TODO we should probably make this configurable
-    println!();
+    if !opts.links_only {
+        println!()
+    }
 
     Ok(())
 }
