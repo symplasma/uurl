@@ -6,7 +6,7 @@ use color_eyre::{Result, eyre::Ok};
 use csscolorparser::parse;
 use linkify::{LinkFinder, LinkKind, Spans};
 use std::io::{self, Read};
-use yansi::{Paint, Style};
+use yansi::{Paint, Style, hyperlink::HyperlinkExt};
 
 use crate::cli::Cli;
 
@@ -75,7 +75,11 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
                     // LinkKind is marked as non-exhaustive so we must have this
                     _ => unimplemented!("This link kind has not been implemented yet."),
                 };
-                print!("{}", string.paint(link_style));
+                if opts.clickable {
+                    print!("{}", string.link(string).paint(link_style));
+                } else {
+                    print!("{}", string.paint(link_style));
+                }
             }
         }
     }

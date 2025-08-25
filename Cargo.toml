@@ -16,6 +16,6 @@ clap = { version = "4.0", features = ["derive"] }
 arboard = "3.0"
 atty = "0.2"
 linkify = "0.10.0"
-yansi = "1.0.1"
+yansi = { version = "1.0.1", features = ["hyperlink"] }
 csscolorparser = { version = "0.7.2", features = ["serde"] }
 color-eyre = "0.6.5"
