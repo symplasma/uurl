@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.1.2 (2025-10-12)
+
+### Documentation
+
+ - <csr-id-2cd0dc099437e39d1e615e67a54b8fbf86fbebdc/> Update features in readme
+
+### New Features
+
+ - <csr-id-545de5e0680add6b1cee26af73c6f054409baa6e/> Add retrieval of link metadata
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 4 commits contributed to the release over the course of 48 calendar days.
+ - 48 days passed between releases.
+ - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Add features ([`52f41f9`](https://github.com/symplasma/uurl/commit/52f41f9f860655942684bb009d304aa6e9f1bf65))
+    - Cleanup short command flags ([`08bfab0`](https://github.com/symplasma/uurl/commit/08bfab0439794497263d3dbc284f6f1929a71213))
+    - Add retrieval of link metadata ([`545de5e`](https://github.com/symplasma/uurl/commit/545de5e0680add6b1cee26af73c6f054409baa6e))
+    - Update features in readme ([`2cd0dc0`](https://github.com/symplasma/uurl/commit/2cd0dc099437e39d1e615e67a54b8fbf86fbebdc))
+</details>
+
 ## v0.1.1 (2025-08-25)
 
 ### New Features
@@ -19,7 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 5 commits contributed to the release.
+ - 6 commits contributed to the release.
  - 5 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -30,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release uurl v0.1.1 ([`b2e76db`](https://github.com/symplasma/uurl/commit/b2e76db4b6e20eccfbb2468560ec64e89000b592))
     - Add --git-ssh option ([`598a28a`](https://github.com/symplasma/uurl/commit/598a28a03807cec0c976ff6f5202180546330ca6))
     - Add Url newtype wrapper for url crate ([`fad2019`](https://github.com/symplasma/uurl/commit/fad2019bbd4893f7e90dd54335eeb5b245eae62d))
     - Add url module to project structure ([`2de0063`](https://github.com/symplasma/uurl/commit/2de00634420af5bdbe0f750f895c3f31ff9c8fdf))
