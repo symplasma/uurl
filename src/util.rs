@@ -83,7 +83,6 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
                                 Webpage::from_url(url.as_url().as_str(), WebpageOptions::default())
                                     .expect("could not get info for url");
 
-                            // TODO add whitespace and unicode normalization for metadata
                             // TODO add custom formatting options here
                             format!(
                                 "[{}]({url}): {}",

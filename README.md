@@ -31,3 +31,6 @@ Universal url: a transformer and manipulator for Urls.
     - [ ] Be able to switch between various git providers
     - [ ] Truncate a github url to it's basic path i.e. ORG_OR_USER/REPO
 - [ ] Switch between lib.rs and crates.io
+- [ ] Add whitespace and unicode normalization for link metadata
+- [ ] Add custom formatting options for markdown links
+- [ ] Figure out how to grab the right title when Anubis or other anti-scripting measures are in place
