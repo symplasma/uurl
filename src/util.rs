@@ -6,6 +6,7 @@ use color_eyre::{Result, eyre::Ok};
 use csscolorparser::parse;
 use linkify::{LinkFinder, LinkKind, Spans};
 use std::io::{self, Read};
+use webpage::{Webpage, WebpageOptions};
 use yansi::{Paint, Style, hyperlink::HyperlinkExt};
 
 use crate::{cli::Cli, url::Url};
@@ -76,7 +77,19 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
                 let string = match link_kind {
                     LinkKind::Url => {
                         let url = Url::parse(span.as_str())?;
-                        if opts.git_ssh {
+                        if opts.as_markdown {
+                            // get the title of the link
+                            let info =
+                                Webpage::from_url(url.as_url().as_str(), WebpageOptions::default())
+                                    .expect("could not get info for url");
+
+                            // TODO add custom formatting options here
+                            format!(
+                                "[{}]({url}): {}",
+                                info.html.title.unwrap_or_default(),
+                                info.html.description.unwrap_or_default()
+                            )
+                        } else if opts.git_ssh {
                             url.to_git_ssh()
                         } else {
                             url.as_url().as_str().to_owned()
@@ -110,7 +123,7 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
 }
 
 /// Find URls in the input
-pub fn text_to_spans(text: &str) -> Spans {
+pub fn text_to_spans(text: &'_ str) -> Spans<'_> {
     let mut finder = LinkFinder::new();
     finder.url_must_have_scheme(false);
     finder.spans(text)

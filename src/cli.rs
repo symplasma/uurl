@@ -24,4 +24,8 @@ pub struct Cli {
     /// Prints URLs as Git SSH style urls
     #[arg(long)]
     pub(crate) git_ssh: bool,
+
+    /// Prints URLs as markdown links with their title and their description
+    #[arg(short = 'm', long)]
+    pub(crate) as_markdown: bool,
 }

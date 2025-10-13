@@ -16,7 +16,7 @@ Universal url: a transformer and manipulator for Urls.
   - [ ] Markdown links
 - [x] Color links via ANSI codes
 - [x] Make links clickable via OSC8 codes
-- [ ] Convert bare links to Markdown links with titles
+- [x] Convert bare links to Markdown links with titles
 - [ ] Extract various URL components
 - [ ] Rewrite/modify various URL components
 - [ ] Replace URLs based on template expressions
