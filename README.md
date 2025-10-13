@@ -17,6 +17,8 @@ Universal url: a transformer and manipulator for Urls.
 - [x] Color links via ANSI codes
 - [x] Make links clickable via OSC8 codes
 - [x] Convert bare links to Markdown links with titles
+- [ ] Add support for setting [webpage crate options](https://docs.rs/webpage/2.0.1/webpage/#options) when retrieving link metadata
+- [ ] Add `--continue-on-error` support to skip links where metadata cannot be retrieved
 - [ ] Extract various URL components
 - [ ] Rewrite/modify various URL components
 - [ ] Replace URLs based on template expressions
