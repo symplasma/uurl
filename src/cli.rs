@@ -14,15 +14,15 @@ pub struct Cli {
     pub(crate) color_urls: Option<String>,
 
     /// Make links clickable
-    #[arg(short = 'l', long)]
+    #[arg(long)]
     pub(crate) clickable: bool,
 
     /// Print only links, one per line
-    #[arg(long)]
+    #[arg(short = 'l', long)]
     pub(crate) links_only: bool,
 
     /// Prints URLs as Git SSH style urls
-    #[arg(long)]
+    #[arg(short = 's', long)]
     pub(crate) git_ssh: bool,
 
     /// Prints URLs as markdown links with their title and their description
