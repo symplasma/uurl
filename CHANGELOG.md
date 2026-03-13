@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.1.3 (2026-03-13)
+
+### New Features
+
+ - <csr-id-4ae77ae66b6f59128d2c73540242f0bd04f12a4e/> Render markdown links as raw on error
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 5 commits contributed to the release over the course of 151 calendar days.
+ - 151 days passed between releases.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Render markdown links as raw on error ([`4ae77ae`](https://github.com/symplasma/uurl/commit/4ae77ae66b6f59128d2c73540242f0bd04f12a4e))
+    - Fix link parsing error ([`5e2a204`](https://github.com/symplasma/uurl/commit/5e2a2046b7ea0d2071ba6b70e1d2be266a233486))
+    - Add rust crates design doc ([`c470b76`](https://github.com/symplasma/uurl/commit/c470b76ab4bad40cae109314001249ab0f5db460))
+    - Add clippy lints ([`95070f0`](https://github.com/symplasma/uurl/commit/95070f09e5050bede3d6f0613008042a42a489bd))
+    - Add features to readme ([`b92ce59`](https://github.com/symplasma/uurl/commit/b92ce59e3fd269acc41addc3cc979806fdbb521a))
+</details>
+
 ## v0.1.2 (2025-10-12)
 
 ### Documentation
@@ -19,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 4 commits contributed to the release over the course of 48 calendar days.
+ - 5 commits contributed to the release over the course of 48 calendar days.
  - 48 days passed between releases.
  - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -31,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release uurl v0.1.2 ([`7e651d1`](https://github.com/symplasma/uurl/commit/7e651d182d3d0de694f675d3a1fb27e2d5afa3f6))
     - Add features ([`52f41f9`](https://github.com/symplasma/uurl/commit/52f41f9f860655942684bb009d304aa6e9f1bf65))
     - Cleanup short command flags ([`08bfab0`](https://github.com/symplasma/uurl/commit/08bfab0439794497263d3dbc284f6f1929a71213))
     - Add retrieval of link metadata ([`545de5e`](https://github.com/symplasma/uurl/commit/545de5e0680add6b1cee26af73c6f054409baa6e))
