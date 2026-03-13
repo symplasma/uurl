@@ -55,21 +55,21 @@ pub fn get_input(opts: &Cli) -> Result<InputSource> {
 fn open_url(url: &str, program: &Option<String>, first_url: bool) -> Result<()> {
     match program {
         Some(prog) if !prog.is_empty() => {
-            // Build the command with optional --new-tab flag
-            let new_tab_flag = if first_url { "" } else { "--new-tab " };
-            
             // If the program contains spaces, run via shell
             if prog.contains(' ') {
+                // Build the command with optional --new-tab flag
+                let new_tab_flag = if first_url { " " } else { " --new-tab " };
+
                 #[cfg(target_os = "windows")]
                 {
                     Command::new("cmd")
-                        .args(["/C", &format!("{prog} {new_tab_flag}{url}")])
+                        .args(["/C", &format!("{prog}{new_tab_flag}{url}")])
                         .spawn()?;
                 }
                 #[cfg(not(target_os = "windows"))]
                 {
                     Command::new("sh")
-                        .args(["-c", &format!("{prog} {new_tab_flag}{url}")])
+                        .args(["-c", &format!("{prog}{new_tab_flag}{url}")])
                         .spawn()?;
                 }
             } else {
@@ -104,10 +104,10 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
         let [r, g, b, _a] = parse(color_urls)?.to_rgba8();
         link_style = link_style.rgb(r, g, b);
     }
-    
+
     // Track whether this is the first URL being opened
     let mut first_url = true;
-    
+
     for span in text_to_spans(&text) {
         match span.kind() {
             // Handle non-link text
