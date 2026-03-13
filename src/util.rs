@@ -6,7 +6,9 @@ use browsers::get_browsers;
 use color_eyre::{Result, eyre::Ok};
 use csscolorparser::parse;
 use linkify::{LinkFinder, LinkKind, Spans};
+use std::fs;
 use std::io::{self, Read};
+use std::path::PathBuf;
 use std::process::Command;
 use std::thread::sleep;
 use std::time::Duration;
@@ -28,15 +30,24 @@ pub enum InputSource {
     Stdin(String),
     Args(Vec<String>),
     Clipboard(String),
+    Files(Vec<PathBuf>),
 }
 
 /// Get input from the most appropriate source based on availability
 ///
 /// Priority order:
-/// 1. STDIN (if available)
-/// 2. Command line arguments (if provided)
-/// 3. System clipboard (as fallback)
+/// 1. Files (if --file is specified)
+/// 2. STDIN (if available)
+/// 3. Command line arguments (if provided)
+/// 4. System clipboard (as fallback)
 pub fn get_input(opts: &Cli) -> Result<InputSource> {
+    // Check if files are specified via --file
+    if let Some(files) = &opts.files {
+        if !files.is_empty() {
+            return Ok(InputSource::Files(files.clone()));
+        }
+    }
+
     // Check if STDIN has data
     if !atty::is(atty::Stream::Stdin) {
         let mut buffer = String::new();
@@ -55,6 +66,19 @@ pub fn get_input(opts: &Cli) -> Result<InputSource> {
     let mut clipboard = arboard::Clipboard::new()?;
     let clipboard_content = clipboard.get_text()?;
     Ok(InputSource::Clipboard(clipboard_content))
+}
+
+/// Read and concatenate content from multiple files
+fn read_files(files: &[PathBuf]) -> Result<String> {
+    let mut content = String::new();
+    for file in files {
+        let file_content = fs::read_to_string(file)?;
+        if !content.is_empty() {
+            content.push('\n');
+        }
+        content.push_str(&file_content);
+    }
+    Ok(content)
 }
 
 /// Open a URL with the specified program or the system default browser
@@ -109,6 +133,7 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
         InputSource::Stdin(content) => content,
         InputSource::Args(args) => args.join("\n"),
         InputSource::Clipboard(content) => content,
+        InputSource::Files(files) => read_files(&files)?,
     };
 
     let mut link_style = Style::default();

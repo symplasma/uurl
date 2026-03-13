@@ -1,4 +1,5 @@
 use clap::Parser;
+use std::path::PathBuf;
 
 #[derive(Parser)]
 #[command(name = "uurl")]
@@ -8,6 +9,10 @@ pub struct Cli {
     /// Input URLs or text to process
     #[arg(trailing_var_arg = true)]
     pub(crate) input: Vec<String>,
+
+    /// Read input from file(s)
+    #[arg(short = 'f', long = "file", num_args = 1..)]
+    pub(crate) files: Option<Vec<PathBuf>>,
 
     /// Print URLs in color, any color notation valid in CSS works (defaults to blue)
     #[arg(short, long, num_args = 0..=1, default_missing_value = "blue")]
