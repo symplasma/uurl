@@ -2,15 +2,24 @@
 //!
 //! This library provides functionality to manipulate URLs from various input sources.
 
+use browsers::get_browsers;
 use color_eyre::{Result, eyre::Ok};
 use csscolorparser::parse;
 use linkify::{LinkFinder, LinkKind, Spans};
 use std::io::{self, Read};
 use std::process::Command;
+use std::thread::sleep;
+use std::time::Duration;
 use webpage::{Webpage, WebpageOptions};
 use yansi::{Paint, Style, hyperlink::HyperlinkExt};
 
 use crate::{cli::Cli, url::Url};
+
+#[derive(Debug)]
+pub(crate) enum BrowserCommand {
+    Command(String),
+    CommandWithArgs(String),
+}
 
 /// Represents the different sources of input for the URL processor
 #[derive(Debug, Clone)]
@@ -52,39 +61,42 @@ pub fn get_input(opts: &Cli) -> Result<InputSource> {
 ///
 /// When `first_url` is `false`, adds `--new-tab` flag to open in a new tab
 /// instead of a new window.
-fn open_url(url: &str, program: &Option<String>, first_url: bool) -> Result<()> {
+fn open_url(url: &str, program: &BrowserCommand, first_url: bool) -> Result<()> {
     match program {
-        Some(prog) if !prog.is_empty() => {
-            // If the program contains spaces, run via shell
-            if prog.contains(' ') {
-                // Build the command with optional --new-tab flag
-                let new_tab_flag = if first_url { " " } else { " --new-tab " };
+        // If the program contains spaces, run via shell
+        BrowserCommand::CommandWithArgs(prog) => {
+            // Build the command with optional --new-tab flag
+            let new_tab_flag = if first_url { " " } else { " --new-tab " };
 
-                #[cfg(target_os = "windows")]
-                {
-                    Command::new("cmd")
-                        .args(["/C", &format!("{prog}{new_tab_flag}{url}")])
-                        .spawn()?;
-                }
-                #[cfg(not(target_os = "windows"))]
-                {
-                    Command::new("sh")
-                        .args(["-c", &format!("{prog}{new_tab_flag}{url}")])
-                        .spawn()?;
-                }
-            } else {
-                if first_url {
-                    Command::new(prog).arg(url).spawn()?;
-                } else {
-                    Command::new(prog).arg("--new-tab").arg(url).spawn()?;
-                }
+            #[cfg(target_os = "windows")]
+            {
+                Command::new("cmd")
+                    .args(["/C", &format!("{prog}{new_tab_flag}{url}")])
+                    .spawn()?;
+            }
+            #[cfg(not(target_os = "windows"))]
+            {
+                Command::new("sh")
+                    .args(["-c", &format!("{prog}{new_tab_flag}{url}")])
+                    .spawn()?;
             }
         }
-        _ => {
-            // Default to system browser
-            open::that(url)?;
+
+        BrowserCommand::Command(prog) => {
+            if first_url {
+                Command::new(prog).arg(url).spawn()?;
+            } else {
+                Command::new(prog).arg("--new-tab").arg(url).spawn()?;
+            }
         }
     }
+
+    if first_url {
+        // give the browser time to launch or spawn a new window
+        // NOTE the 200ms time specified was just a guess, but it seems to work well
+        sleep(Duration::from_millis(200));
+    }
+
     Ok(())
 }
 
@@ -105,6 +117,22 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
         link_style = link_style.rgb(r, g, b);
     }
 
+    let browser_command = if let Some(prog) = &opts.open
+        && !prog.is_empty()
+    {
+        if prog.contains(' ') {
+            BrowserCommand::CommandWithArgs(prog.to_owned())
+        } else {
+            BrowserCommand::Command(prog.to_owned())
+        }
+    } else {
+        let browsers = get_browsers();
+        let browser = browsers
+            .first()
+            .expect("could not find any installed browsers");
+
+        BrowserCommand::Command(browser.path.to_string_lossy().to_string())
+    };
     // Track whether this is the first URL being opened
     let mut first_url = true;
 
@@ -126,7 +154,7 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
                             std::result::Result::Ok(url) => {
                                 // Open the URL if --open is specified
                                 if opts.open.is_some() {
-                                    open_url(url.as_url().as_str(), &opts.open, first_url)?;
+                                    open_url(url.as_url().as_str(), &browser_command, first_url)?;
                                     first_url = false;
                                 }
 
