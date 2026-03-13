@@ -49,25 +49,35 @@ pub fn get_input(opts: &Cli) -> Result<InputSource> {
 }
 
 /// Open a URL with the specified program or the system default browser
-fn open_url(url: &str, program: &Option<String>) -> Result<()> {
+///
+/// When `first_url` is `false`, adds `--new-tab` flag to open in a new tab
+/// instead of a new window.
+fn open_url(url: &str, program: &Option<String>, first_url: bool) -> Result<()> {
     match program {
         Some(prog) if !prog.is_empty() => {
+            // Build the command with optional --new-tab flag
+            let new_tab_flag = if first_url { "" } else { "--new-tab " };
+            
             // If the program contains spaces, run via shell
             if prog.contains(' ') {
                 #[cfg(target_os = "windows")]
                 {
                     Command::new("cmd")
-                        .args(["/C", &format!("{prog} {url}")])
+                        .args(["/C", &format!("{prog} {new_tab_flag}{url}")])
                         .spawn()?;
                 }
                 #[cfg(not(target_os = "windows"))]
                 {
                     Command::new("sh")
-                        .args(["-c", &format!("{prog} {url}")])
+                        .args(["-c", &format!("{prog} {new_tab_flag}{url}")])
                         .spawn()?;
                 }
             } else {
-                Command::new(prog).arg(url).spawn()?;
+                if first_url {
+                    Command::new(prog).arg(url).spawn()?;
+                } else {
+                    Command::new(prog).arg("--new-tab").arg(url).spawn()?;
+                }
             }
         }
         _ => {
@@ -94,6 +104,10 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
         let [r, g, b, _a] = parse(color_urls)?.to_rgba8();
         link_style = link_style.rgb(r, g, b);
     }
+    
+    // Track whether this is the first URL being opened
+    let mut first_url = true;
+    
     for span in text_to_spans(&text) {
         match span.kind() {
             // Handle non-link text
@@ -112,7 +126,8 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
                             std::result::Result::Ok(url) => {
                                 // Open the URL if --open is specified
                                 if opts.open.is_some() {
-                                    open_url(url.as_url().as_str(), &opts.open)?;
+                                    open_url(url.as_url().as_str(), &opts.open, first_url)?;
+                                    first_url = false;
                                 }
 
                                 if opts.as_markdown {
