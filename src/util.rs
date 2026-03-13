@@ -74,40 +74,58 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
 
             // Handle links
             Some(link_kind) => {
-                let string = match link_kind {
+                let link_option = match link_kind {
                     LinkKind::Url => {
-                        let url = Url::parse(span.as_str())?;
-                        if opts.as_markdown {
-                            // get the title of the link
-                            let info =
-                                Webpage::from_url(url.as_url().as_str(), WebpageOptions::default())
+                        let span_string = span.as_str();
+                        match Url::parse(span_string) {
+                            std::result::Result::Ok(url) => {
+                                if opts.as_markdown {
+                                    // get the title of the link
+                                    let info = Webpage::from_url(
+                                        url.as_url().as_str(),
+                                        WebpageOptions::default(),
+                                    )
                                     .expect("could not get info for url");
 
-                            // TODO add custom formatting options here
-                            format!(
-                                "[{}]({url}): {}",
-                                info.html.title.unwrap_or_default(),
-                                info.html.description.unwrap_or_default()
-                            )
-                        } else if opts.git_ssh {
-                            url.to_git_ssh()
-                        } else {
-                            url.as_url().as_str().to_owned()
+                                    // TODO add custom formatting options here
+                                    Some(format!(
+                                        "[{}]({url}): {}",
+                                        info.html.title.unwrap_or_default(),
+                                        info.html.description.unwrap_or_default()
+                                    ))
+                                } else if opts.git_ssh {
+                                    Some(url.to_git_ssh())
+                                } else {
+                                    Some(url.as_url().as_str().to_owned())
+                                }
+                            }
+                            // handle links that the Url lib cannot parse e.g. "relative URL without a base"
+                            Err(_) => {
+                                if !opts.links_only {
+                                    Some(span_string.to_owned())
+                                } else {
+                                    None
+                                }
+                            }
                         }
                     }
-                    LinkKind::Email => span.as_str().to_owned(),
+
+                    LinkKind::Email => Some(span.as_str().to_owned()),
 
                     // LinkKind is marked as non-exhaustive so we must have this
                     _ => unimplemented!("This link kind has not been implemented yet."),
                 };
-                if opts.clickable {
-                    print!("{}", string.link(&string).paint(link_style));
-                } else {
-                    print!("{}", string.paint(link_style));
-                }
 
-                if opts.links_only {
-                    println!()
+                if let Some(string) = link_option {
+                    if opts.clickable {
+                        print!("{}", string.link(&string).paint(link_style));
+                    } else {
+                        print!("{}", string.paint(link_style));
+                    }
+
+                    if opts.links_only {
+                        println!()
+                    }
                 }
             }
         }
