@@ -30,6 +30,7 @@ csscolorparser = { version = "0.7.2", features = ["serde"] }
 color-eyre = "0.6.5"
 url = "2.5"
 webpage = "2.0.1"
+open = "5"
 
 [lints.clippy]
 single_match = "warn"
