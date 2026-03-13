@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.1.4 (2026-03-13)
+
+### New Features
+
+ - <csr-id-150b6d17ed4ae16691fc6d4640fb8f1705965c89/> add `--file` / `-f` option to load content from files
+ - <csr-id-98978635750799df5b7a22eef5f2a340b2b1cfc2/> add --new-tab flag for subsequent URLs with --open option
+ - <csr-id-0f403adc2955c90908dff3fccccbdfc0b75d4d99/> add --open/-o CLI option to open links with specified program
+ - <csr-id-b79210d7913bae5ed976bb07d08695dbe36c3bd7/> add `--open` / `-o` CLI option to open links with custom program or browser
+
+### Refactor
+
+ - <csr-id-1d4c30d6a1e3069e25328498fd8460391a1a8caf/> Clean up opening links in browser
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 7 commits contributed to the release.
+ - 5 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Add `--file` / `-f` option to load content from files ([`150b6d1`](https://github.com/symplasma/uurl/commit/150b6d17ed4ae16691fc6d4640fb8f1705965c89))
+    - Clean up opening links in browser ([`1d4c30d`](https://github.com/symplasma/uurl/commit/1d4c30d6a1e3069e25328498fd8460391a1a8caf))
+    - Update Cargo.lock ([`2357e22`](https://github.com/symplasma/uurl/commit/2357e225f8be6615076d29f43618871448276935))
+    - Formatting and a small refactor ([`9335bdb`](https://github.com/symplasma/uurl/commit/9335bdb770ad69d8d3ddacc88f42a533237d2609))
+    - Add --new-tab flag for subsequent URLs with --open option ([`9897863`](https://github.com/symplasma/uurl/commit/98978635750799df5b7a22eef5f2a340b2b1cfc2))
+    - Add --open/-o CLI option to open links with specified program ([`0f403ad`](https://github.com/symplasma/uurl/commit/0f403adc2955c90908dff3fccccbdfc0b75d4d99))
+    - Add `--open` / `-o` CLI option to open links with custom program or browser ([`b79210d`](https://github.com/symplasma/uurl/commit/b79210d7913bae5ed976bb07d08695dbe36c3bd7))
+</details>
+
 ## v0.1.3 (2026-03-13)
 
 ### New Features
@@ -15,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 5 commits contributed to the release over the course of 151 calendar days.
+ - 6 commits contributed to the release over the course of 151 calendar days.
  - 151 days passed between releases.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -27,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release uurl v0.1.3 ([`87f1ca1`](https://github.com/symplasma/uurl/commit/87f1ca13fbd16a235abb37a2c2ef2fce1c98f121))
     - Render markdown links as raw on error ([`4ae77ae`](https://github.com/symplasma/uurl/commit/4ae77ae66b6f59128d2c73540242f0bd04f12a4e))
     - Fix link parsing error ([`5e2a204`](https://github.com/symplasma/uurl/commit/5e2a2046b7ea0d2071ba6b70e1d2be266a233486))
     - Add rust crates design doc ([`c470b76`](https://github.com/symplasma/uurl/commit/c470b76ab4bad40cae109314001249ab0f5db460))
