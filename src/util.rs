@@ -81,18 +81,21 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
                             std::result::Result::Ok(url) => {
                                 if opts.as_markdown {
                                     // get the title of the link
-                                    let info = Webpage::from_url(
+                                    // TODO maybe make link info fetching asynchronous
+                                    if let std::result::Result::Ok(info) = Webpage::from_url(
                                         url.as_url().as_str(),
                                         WebpageOptions::default(),
-                                    )
-                                    .expect("could not get info for url");
-
-                                    // TODO add custom formatting options here
-                                    Some(format!(
-                                        "[{}]({url}): {}",
-                                        info.html.title.unwrap_or_default(),
-                                        info.html.description.unwrap_or_default()
-                                    ))
+                                    ) {
+                                        // TODO add custom formatting options here
+                                        Some(format!(
+                                            "[{}]({url}): {}",
+                                            info.html.title.unwrap_or_default(),
+                                            info.html.description.unwrap_or_default()
+                                        ))
+                                    } else {
+                                        // if we cannot retrieve the metadata, render it as a raw link
+                                        Some(format!("<{url}>"))
+                                    }
                                 } else if opts.git_ssh {
                                     Some(url.to_git_ssh())
                                 } else {
