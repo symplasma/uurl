@@ -28,4 +28,8 @@ pub struct Cli {
     /// Prints URLs as markdown links with their title and their description
     #[arg(short = 'm', long)]
     pub(crate) as_markdown: bool,
+
+    /// Open each link with a program (defaults to system browser if no program specified)
+    #[arg(short = 'o', long, num_args = 0..=1, default_missing_value = "")]
+    pub(crate) open: Option<String>,
 }

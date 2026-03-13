@@ -6,6 +6,7 @@ use color_eyre::{Result, eyre::Ok};
 use csscolorparser::parse;
 use linkify::{LinkFinder, LinkKind, Spans};
 use std::io::{self, Read};
+use std::process::Command;
 use webpage::{Webpage, WebpageOptions};
 use yansi::{Paint, Style, hyperlink::HyperlinkExt};
 
@@ -47,6 +48,36 @@ pub fn get_input(opts: &Cli) -> Result<InputSource> {
     Ok(InputSource::Clipboard(clipboard_content))
 }
 
+/// Open a URL with the specified program or the system default browser
+fn open_url(url: &str, program: &Option<String>) -> Result<()> {
+    match program {
+        Some(prog) if !prog.is_empty() => {
+            // If the program contains spaces, run via shell
+            if prog.contains(' ') {
+                #[cfg(target_os = "windows")]
+                {
+                    Command::new("cmd")
+                        .args(["/C", &format!("{prog} {url}")])
+                        .spawn()?;
+                }
+                #[cfg(not(target_os = "windows"))]
+                {
+                    Command::new("sh")
+                        .args(["-c", &format!("{prog} {url}")])
+                        .spawn()?;
+                }
+            } else {
+                Command::new(prog).arg(url).spawn()?;
+            }
+        }
+        _ => {
+            // Default to system browser
+            open::that(url)?;
+        }
+    }
+    Ok(())
+}
+
 /// Process the input and return the result
 ///
 /// Currently just passes through the input as-is.
@@ -68,7 +99,7 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
             // Handle non-link text
             None => {
                 if !opts.links_only {
-                    print!("{}", span.as_str())
+                    print!("{}", span.as_str());
                 }
             }
 
@@ -79,6 +110,11 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
                         let span_string = span.as_str();
                         match Url::parse(span_string) {
                             std::result::Result::Ok(url) => {
+                                // Open the URL if --open is specified
+                                if opts.open.is_some() {
+                                    open_url(url.as_url().as_str(), &opts.open)?;
+                                }
+
                                 if opts.as_markdown {
                                     // get the title of the link
                                     // TODO maybe make link info fetching asynchronous
@@ -127,7 +163,7 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
                     }
 
                     if opts.links_only {
-                        println!()
+                        println!();
                     }
                 }
             }
@@ -137,7 +173,7 @@ pub fn process_input(input: InputSource, opts: &Cli) -> Result<()> {
     // add a newline after the text
     // TODO we should probably make this configurable
     if !opts.links_only {
-        println!()
+        println!();
     }
 
     Ok(())
